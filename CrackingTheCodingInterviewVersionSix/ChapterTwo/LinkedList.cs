@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -234,6 +235,61 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterTwo
             
 
             return endNode;
+        }
+
+        public void DeleteMiddleNode(Node nodeToDelete)
+        {
+            Node curr = nodeToDelete;
+            Node prevNode = curr;
+
+            while (curr.next != null)
+            {
+                curr.data = curr.next.data;
+
+                curr = curr.next;
+
+                if (curr.next == null)
+                {
+                    prevNode.next = null;
+                    return;
+                }
+                else
+                {
+                    prevNode = prevNode.next;
+                }
+            }
+
+            curr = null;
+
+        }
+
+        public Node ReturnKthToLastNode(Node head, int k)
+        {
+            var curr = head;
+
+            int totalNodes = 0;
+
+            while (curr != null)
+            {
+                totalNodes++;
+                curr = curr.next;
+            }
+
+            if (k - totalNodes > 0)
+            {
+                return null;
+            }
+
+            var nodeToSend = totalNodes - k;
+            curr = head;
+            while (nodeToSend > 0)
+            {
+                curr = curr.next;
+                nodeToSend--;
+            }
+
+
+            return curr;
         }
     }
 }

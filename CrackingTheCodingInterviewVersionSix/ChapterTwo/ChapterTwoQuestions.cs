@@ -170,6 +170,47 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterTwo
             PrintLinkedList(total);
         }
 
+        /// <summary>
+        /// Delete a node in the middle of a linked list given only access to that node.
+        /// </summary>
+        public void QuestionThree()
+        {
+            Node head = new Node(1);
+            head.AppendToTail(2);
+            head.AppendToTail(3);
+
+            Node newNode = new Node(4);
+            head.AppendNodeToTail(newNode);
+            head.AppendToTail(5);
+
+            var ll = new LinkedList();
+            PrintLinkedList(head);
+            ll.DeleteMiddleNode(newNode);
+            PrintLinkedList(head);
+        }
+
+        /// <summary>
+        /// Find the kth to last node of a singly linked list
+        /// </summary>
+        public void QuestionTwo()
+        {
+            Node head = new Node(1);
+            head.AppendToTail(2);
+            head.AppendToTail(3);
+            head.AppendToTail(4);
+            head.AppendToTail(5);
+
+            var ll = new LinkedList();
+
+            PrintLinkedList(head);
+            Console.WriteLine(("The 2nd to last Node is " + ll.ReturnKthToLastNode(head, 2).data));
+            Console.WriteLine(("The fifth to last Node is " + ll.ReturnKthToLastNode(head, 5).data));
+            Console.WriteLine(("The 1st to last Node is " + ll.ReturnKthToLastNode(head, 1).data));
+
+
+
+        }
+
         private void PrintLinkedList(Node head)
         {
             while (head != null)
