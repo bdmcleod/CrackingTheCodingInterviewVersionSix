@@ -45,6 +45,10 @@
   <ItemGroup>
     <Compile Include="ChapterOne\ArraysAndStrings.cs" />
     <Compile Include="ChapterOne\ChapterOneQuestions.cs" />
+    <Compile Include="ChapterThree\ChapterThreeQuestions.cs" />
+    <Compile Include="ChapterThree\MyQueue.cs" />
+    <Compile Include="ChapterThree\MyStack.cs" />
+    <Compile Include="ChapterThree\MyStackWithMin.cs" />
     <Compile Include="ChapterTwo\LinkedList.cs" />
     <Compile Include="ChapterTwo\Node.cs" />
     <Compile Include="ChapterTwo\ChapterTwoQuestions.cs" />
