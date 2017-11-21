@@ -52,5 +52,32 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterThree
 
 
         }
+
+        /// <summary>
+        /// Imagine if a stack gets too high it will topple. Implement a data structure that behaves like a stack, but limits the size of each stack.
+        /// I arbitrarily chose 3 as the max height. 
+        /// </summary>
+        public void QuestionThree()
+        {
+            var stackSet = new SetOfStacks<int>();
+            stackSet.Push(1);
+            stackSet.Push(2);
+            stackSet.Push(3);
+            stackSet.Push(4);
+            stackSet.Push(5);
+            stackSet.Push(6);
+            stackSet.Push(7);
+            stackSet.Push(8);
+            stackSet.Push(9);
+            stackSet.Push(10);
+            for (int i = 0; i < 10; i++)
+            {
+                Console.WriteLine(stackSet.Pop());
+            }
+            
+
+
+
+        }
     }
 }
