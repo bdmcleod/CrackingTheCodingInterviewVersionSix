@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChapterFour\ChapterFourQuestions.cs" />
+    <Compile Include="ChapterFour\TreeNode.cs" />
     <Compile Include="ChapterOne\ArraysAndStrings.cs" />
     <Compile Include="ChapterOne\ChapterOneQuestions.cs" />
     <Compile Include="ChapterThree\ChapterThreeQuestions.cs" />

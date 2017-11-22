@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using CrackingTheCodingInterviewVersionSix.ChapterOne;
 using CrackingTheCodingInterviewVersionSix.ChapterTwo;
 using CrackingTheCodingInterviewVersionSix.ChapterThree;
+using CrackingTheCodingInterviewVersionSix.ChapterFour;
 
 namespace CrackingTheCodingInterviewVersionSix
 {
@@ -13,8 +14,8 @@ namespace CrackingTheCodingInterviewVersionSix
     {
         static void Main(string[] args)
         {
-            var questions = new ChapterThreeQuestions();
-            questions.QuestionThree();
+            var questions = new ChapterFourQuestions();
+            questions.BasicTraversal();
 
             Console.ReadLine();
         }
