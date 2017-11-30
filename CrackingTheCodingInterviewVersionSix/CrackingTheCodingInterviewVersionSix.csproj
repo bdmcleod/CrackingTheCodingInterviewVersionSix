@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChapterFour\ChapterFourQuestions.cs" />
+    <Compile Include="ChapterFour\Graph.cs" />
     <Compile Include="ChapterFour\TreeNode.cs" />
     <Compile Include="ChapterOne\ArraysAndStrings.cs" />
     <Compile Include="ChapterOne\ChapterOneQuestions.cs" />

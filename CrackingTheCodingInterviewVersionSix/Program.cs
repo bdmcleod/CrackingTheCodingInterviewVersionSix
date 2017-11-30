@@ -15,7 +15,7 @@ namespace CrackingTheCodingInterviewVersionSix
         static void Main(string[] args)
         {
             var questions = new ChapterFourQuestions();
-            questions.BasicTraversal();
+            questions.QuestionTwo();
 
             Console.ReadLine();
         }
