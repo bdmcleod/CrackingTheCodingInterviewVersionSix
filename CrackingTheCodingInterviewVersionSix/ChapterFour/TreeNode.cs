@@ -101,5 +101,35 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterFour
             }
 
         }
+
+        public void PostOrderIterativeTraversal(TreeNode root)
+        {
+            var values = new List<TreeNode>();
+            var stackNode = new Stack<TreeNode>();
+
+            if (root != null)
+            {
+                stackNode.Push(root);
+            }
+
+            while (stackNode.Count > 0)
+            {
+                var top = stackNode.Pop();
+                values.Add(top);
+
+                if (top.leftChild != null)
+                {
+                    stackNode.Push(top.leftChild);
+                }
+
+                if (top.rightChild != null)
+                {
+                    stackNode.Push(top.rightChild);
+                }
+            }
+
+            values.Reverse();
+
+        }
     }
 }

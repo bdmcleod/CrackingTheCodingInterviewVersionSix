@@ -133,14 +133,16 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterOne
             var s4 = "Cars";
             var s5 = "bar";
             var s6 = "bad";
+            var s7 = "rad";
             
-            Console.WriteLine("Is {0} one edit away from {1}?" + (aas.OneEditAway(s1, s2)? "Yes" : "No"), s1, s2);
-            Console.WriteLine("Is {0} one edit away from {1}?" + (aas.OneEditAway(s1, s3) ? "Yes" : "No"), s1, s3);
-            Console.WriteLine("Is {0} one edit away from {1}?" + (aas.OneEditAway(s1, s4) ? "Yes" : "No"), s1, s4);
-            Console.WriteLine("Is {0} one edit away from {1}?" + (aas.OneEditAway(s3, s4) ? "Yes" : "No"), s3, s4);
-            Console.WriteLine("Is {0} one edit away from {1}?" + (aas.OneEditAway(s1, s5) ? "Yes" : "No"), s1, s5);
-            Console.WriteLine("Is {0} one edit away from {1}?" + (aas.OneEditAway(s5, s6) ? "Yes" : "No"), s5, s6);
-            Console.WriteLine("Is {0} one edit away from {1}?" + (aas.OneEditAway(s4, s3) ? "Yes" : "No"), s4, s3);
+            Console.WriteLine("Is {0} one edit away from {1}? " + (aas.OneEditAway(s1, s2)? "Yes" : "No"), s1, s2);
+            Console.WriteLine("Is {0} one edit away from {1}? " + (aas.OneEditAway(s1, s3) ? "Yes" : "No"), s1, s3);
+            Console.WriteLine("Is {0} one edit away from {1}? " + (aas.OneEditAway(s1, s4) ? "Yes" : "No"), s1, s4);
+            Console.WriteLine("Is {0} one edit away from {1}? " + (aas.OneEditAway(s3, s4) ? "Yes" : "No"), s3, s4);
+            Console.WriteLine("Is {0} one edit away from {1}? " + (aas.OneEditAway(s1, s5) ? "Yes" : "No"), s1, s5);
+            Console.WriteLine("Is {0} one edit away from {1}? " + (aas.OneEditAway(s5, s6) ? "Yes" : "No"), s5, s6);
+            Console.WriteLine("Is {0} one edit away from {1}? " + (aas.OneEditAway(s4, s3) ? "Yes" : "No"), s4, s3);
+            Console.WriteLine("Is {0} one edit away from {1}? " + (aas.OneEditAway(s5, s7) ? "Yes" : "No"), s5, s7);
         }
 
         /// <summary>
@@ -163,5 +165,7 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterOne
             Console.WriteLine("The string compression for {0} is " + aas.StringCompression(s5), s5);
 
         }
+
+
     }
 }

@@ -43,11 +43,11 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterTwo
 
             Console.WriteLine("Using No Buffer");
             PrintLinkedList(head);
-            PrintLinkedList(ll.RemoveDuplicatesFromAnUnsortedLinkedList(head));
+            PrintLinkedList(ll.RemoveDuplicatesFromUnsortedListNoBuffer(head));
             PrintLinkedList(head2);
-            PrintLinkedList(ll.RemoveDuplicatesFromAnUnsortedLinkedList(head2));
+            PrintLinkedList(ll.RemoveDuplicatesFromUnsortedListNoBuffer(head2));
             PrintLinkedList(head3);
-            PrintLinkedList(ll.RemoveDuplicatesFromAnUnsortedLinkedList(head3));
+            PrintLinkedList(ll.RemoveDuplicatesFromUnsortedListNoBuffer(head3));
 
 
         }
@@ -153,13 +153,13 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterTwo
         /// </summary>
         public void QuestionFive()
         {
-            Node head1 = new Node(1);
+            Node head1 = new Node(2);
+            head1.AppendToTail(4);
             head1.AppendToTail(3);
-            head1.AppendToTail(5);
 
-            Node head2 = new Node(3);
+            Node head2 = new Node(5);
+            head2.AppendToTail(6);
             head2.AppendToTail(4);
-            head2.AppendToTail(9);
 
             var ll = new LinkedList();
 

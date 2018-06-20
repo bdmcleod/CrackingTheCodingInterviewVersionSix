@@ -80,27 +80,31 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterTwo
                 return head;
             }
 
-            Node curr = head;
-            Node prev = curr;
-            curr = curr.next;
-            Node runner = head;
+            var firstNode = head;
+            var runnerNode = head.next;
+            
 
-            while (runner != null)
+            while (firstNode != null)
             {
-                while (curr != null)
+                while (runnerNode != null)
                 {
-                    if (runner.data == curr.data)
+                    if (firstNode.data == runnerNode.data)
                     {
-                        //remove
-                        prev.next = curr.next;
+                        firstNode.next = runnerNode.next;
+                        break;
                     }
 
-                    prev = curr;
-                    curr = curr.next;
+
+                    runnerNode = runnerNode.next;
                 }
-                runner = runner.next;
-                curr = runner.next;
-                prev = runner;
+
+                if (firstNode.next == null)
+                {
+                    break;
+                }
+
+                firstNode = firstNode.next;                
+                runnerNode =firstNode.next;
             }
 
             return head;
@@ -265,31 +269,24 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterTwo
 
         public Node ReturnKthToLastNode(Node head, int k)
         {
-            var curr = head;
+            var p1 = head;
+            var p2 = head;
 
-            int totalNodes = 0;
-
-            while (curr != null)
+            for (int i =0; i < k; i++)
             {
-                totalNodes++;
-                curr = curr.next;
+                if (p1 == null)
+                {
+                    return null;
+                }
+                p1 = p1.next;
             }
 
-            if (k - totalNodes > 0)
+            while (p1 != null)
             {
-                return null;
+                p1 = p1.next;
+                p2 = p2.next;
             }
-
-            var nodeToSend = totalNodes - k;
-            curr = head;
-            while (nodeToSend > 0)
-            {
-                curr = curr.next;
-                nodeToSend--;
-            }
-
-
-            return curr;
+            return p2;
         }
     }
 }

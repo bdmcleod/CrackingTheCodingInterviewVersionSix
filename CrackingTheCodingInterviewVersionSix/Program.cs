@@ -7,6 +7,8 @@ using CrackingTheCodingInterviewVersionSix.ChapterOne;
 using CrackingTheCodingInterviewVersionSix.ChapterTwo;
 using CrackingTheCodingInterviewVersionSix.ChapterThree;
 using CrackingTheCodingInterviewVersionSix.ChapterFour;
+using CrackingTheCodingInterviewVersionSix.Misc;
+using CrackingTheCodingInterviewVersionSix.Recursion_problems;
 
 namespace CrackingTheCodingInterviewVersionSix
 {
@@ -14,8 +16,8 @@ namespace CrackingTheCodingInterviewVersionSix
     {
         static void Main(string[] args)
         {
-            var questions = new ChapterFourQuestions();
-            questions.QuestionTwo();
+            var questions = new MiscQuestions();
+            questions.MoveZeroesQuestion();
 
             Console.ReadLine();
         }

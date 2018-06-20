@@ -55,8 +55,12 @@
     <Compile Include="ChapterTwo\LinkedList.cs" />
     <Compile Include="ChapterTwo\Node.cs" />
     <Compile Include="ChapterTwo\ChapterTwoQuestions.cs" />
+    <Compile Include="Misc\LRUCache.cs" />
+    <Compile Include="Misc\MiscQuestions.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Recursion problems\RecursionLogic.cs" />
+    <Compile Include="Recursion problems\RecursionQuestions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
