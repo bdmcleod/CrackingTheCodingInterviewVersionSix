@@ -748,16 +748,279 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
         }
 
-        //public string CountAndSay(int n)
-        //{
+        /// <summary>
+        /// Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
+        /// 
+        /// </summary>
+        public void IsPalindromeQuestion()
+        {
+            var testText = "A man, a plan, a canal: Panama";
+            if (IsPalindromeIgnoreCase(testText))
+            {
+                Console.WriteLine("true");
+            }
+            else{
+                Console.WriteLine("false");
+            }
+        }
 
-        //}
+        public bool IsPalindromeIgnoreCase(string s)
+        {
+            var lower = s.ToLower();
+            var sb = new StringBuilder();
+
+            foreach (var letter in lower)
+            {
+                if (Char.IsLetterOrDigit(letter))
+                {
+                    sb.Append(letter);
+                }
+                    
+            }
+
+            var trimmedString = sb.ToString();
+
+            for (int i=0, j= trimmedString.Length-1; i < j; i++, j--)
+            {
+                if (trimmedString[i] != trimmedString[j])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public IList<IList<int>> Subsets(int[] nums)
+        {
+            //list to return
+            var allSubsets  = new List<IList<int>>();
+
+            //empty set
+            allSubsets.Add(new List<int>());
 
 
-            /// <summary>
-            /// Move all zeroes to the end, in place without an extra buffer.
-            /// </summary>
-            /// <param name="nums"></param>
+            for (int i =0; i < nums.Length; i++)
+            {
+                var newSubsets = new List<IList<int>>();
+                for (int j =0; j < allSubsets.Count; j++)
+                {
+                    var curr = new List<int>(allSubsets[j]);
+                    curr.Add(nums[i]);
+                    newSubsets.Add(curr);
+                }
+
+                for (int j=0; j < newSubsets.Count; j++)
+                {
+                    allSubsets.Add(newSubsets[j]);
+                }
+            }
+
+            return allSubsets;
+        }
+
+        public TreeNode LowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q)
+        {
+            if (root == null)
+            {
+                return null;
+            }
+
+            if (root == p || root == q)
+            {
+                return root;
+            }
+
+            var left = LowestCommonAncestor(root.leftChild, p, q);
+            var right = LowestCommonAncestor(root.rightChild, p, q);
+
+            if (left != null && right != null)
+            {
+                return root;
+            }
+
+            return left ?? right;
+        }
+
+        /// <summary>
+        /// Given a string S, we can transform every letter individually to be lowercase or uppercase to create another string.  Return a list of all possible strings we could create.
+        /// Examples:
+        //        Input: S = "a1b2"
+        //Output: ["a1b2", "a1B2", "A1b2", "A1B2"]
+
+        //        Input: S = "3z4"
+        //Output: ["3z4", "3Z4"]
+
+        //        Input: S = "12345"
+        //Output: ["12345"]
+        /// </summary>
+        public void LetterCasePermutationQuestion()
+        {
+            var input = "a1b2";
+
+            var result = LetterCasePermutation(input);
+        }
+
+        public static IList<string> LetterCasePermutation(string S)
+        {
+            if (string.IsNullOrEmpty(S))
+            {
+                return new List<string>() { string.Empty };
+            }
+                
+            var list = new List<string>();
+            list.Add(S);
+            Permutation(S.ToCharArray(), 0, list);
+            return list;
+        }
+
+        public static void Permutation(char[] s, int i, List<string> list)
+        {
+            if (i == s.Length) return;
+            if (char.IsLetter(s[i]))
+            {
+                var temp = s[i];
+                Permutation(s, i + 1, list);
+                s[i] = char.IsLower(s[i]) ? char.ToUpper(s[i]) : char.ToLower(s[i]);
+                Permutation(s, i + 1, list);
+                list.Add(new string(s));
+                s[i] = temp;
+            }
+            else Permutation(s, i + 1, list);
+        }
+
+        public Node ReverseListRecursive(Node head)
+        {
+            return SwapNext(null, head);
+        }
+
+        private Node SwapNext(Node current, Node next)
+        {
+            if (next == null)
+                return current;
+
+            Node nextNext = next.next;
+            next.next = current;
+            return SwapNext(next, nextNext);
+        }
+
+        public void ReverseLLRecursiveQuestion()
+        {
+            Node n = new Node(1);
+            n.AppendToTail(2);
+            n.AppendToTail(3);
+            n.AppendToTail(4);
+            n.AppendToTail(5);
+
+
+            var r = ReverseListRecursive(n);
+
+            while (r!= null)
+            {
+                Console.Write(r + " ");
+                r = r.next;
+            }
+        }
+
+        public void MakePermutation(char[] arr, int start, int end)
+        {
+            if (start == end)
+            {
+                Console.Write(arr);
+                Console.WriteLine();
+            }
+            else
+            {
+                for (int i=start; i <= end; i++)
+                {
+                    Swap(ref arr[start], ref arr[i]);
+                    MakePermutation(arr, start + 1, end);
+                    Swap(ref arr[start], ref arr[i]);
+
+                }
+            }
+
+        }
+
+        private void Swap(ref char a, ref char b)
+        {
+            if (a == b)
+                    return;
+
+            a ^= b;
+            b ^= a;
+            a ^= b;
+        }
+
+        public void PermQuestion()
+        {
+            string input = "";
+
+            while (input != "-1")
+            {
+                Console.Write("Please enter a string to get all the permutations: ");
+                input = Console.ReadLine();
+
+                if (input != "-1")
+                {
+                    MakePermutation(input.ToCharArray(), 0, input.Length - 1);
+                    
+                }
+            }
+        }
+
+        /// <summary>
+        /// Given two sorted integer arrays nums1 and nums2, merge nums2 into nums1 as one sorted array.
+        /// Input:
+        //        nums1 = [1,2,3,0,0,0], m = 3
+        //nums2 = [2,5,6],       n = 3
+
+        //Output: [1,2,2,3,5,6]
+        /// </summary>
+        public void MergeSortedArrayQuestion()
+        {
+
+        }
+
+        public void Merge(int[] nums1, int m, int[] nums2, int n)
+        {
+            for (int i = m, j = 0; i < m + n; i++, j++)
+            {
+                nums1[i] = nums2[j];
+            }
+
+            Array.Sort(nums1);
+
+        }
+
+
+
+        /// <summary>
+        /// Given a set of distinct integers, nums, return all possible subsets (the power set).
+        /// Input: nums = [1,2,3]
+        //        Output:
+        //[
+        //  [3],
+        //  [1],
+        //  [2],
+        //  [1,2,3],
+        //  [1,3],
+        //  [2,3],
+        //  [1,2],
+        //  []
+        //]
+        /// </summary>
+        public void SubSetQuestion()
+        {
+
+        }
+
+
+
+        /// <summary>
+        /// Move all zeroes to the end, in place without an extra buffer.
+        /// </summary>
+        /// <param name="nums"></param>
         public void MoveZeroes(int[] nums)
         {
             int lastNonZeroIndex = 0;
@@ -786,5 +1049,156 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
                 Console.Write(e + " ");
             }
         }
+
+        /// <summary>
+        /// Input: ["eat", "tea", "tan", "ate", "nat", "bat"],
+        //        Output:
+        //[
+        //  ["ate","eat","tea"],
+        //  ["nat","tan"],
+        //  ["bat"]
+        //]
+        /// 
+        /// </summary>
+        public void GroupAnagramsQuestion()
+        {
+            var arr = new string[] { "eat", "tea", "tan", "ate", "nat", "bat" };
+            var result = GroupAnagrams(arr);
+
+            foreach(var firstLevel in result)
+            {
+                foreach (var secondLevel in firstLevel)
+                {
+                    Console.Write(secondLevel + " ");
+                }
+
+                Console.WriteLine();
+            }
+        }
+
+        public IList<IList<string>> GroupAnagrams(string[] strs)
+        {
+            Dictionary<string, List<string>> dict = new Dictionary<string, List<string>>();
+
+            foreach (string s in strs)
+            {
+                string temp = String.Concat(s.OrderBy(c => c));
+
+                if (dict.ContainsKey(temp))
+                {
+                    dict[temp].Add(s);
+                    continue;
+                }
+
+                dict.Add(temp, new List<string>() { s });
+            }
+
+            return new List<IList<string>>(dict.Values);
+        }
+
+        public int MaxProfit(int[] prices)
+        {
+
+            int profit = 0;
+            int minIndex = prices.Length > 0 ? 0 : -1;
+
+            for (int i = 0; i < prices.Length; i++)
+            {
+                if (prices[i] < prices[minIndex])
+                {
+                    minIndex = i;
+                }
+                else
+                {
+                    profit = Math.Max(profit, prices[i] - prices[minIndex]);
+                }
+            }
+            return profit;
+
+
+        }
+        /// <summary>
+        /// Given an array nums of n integers where n > 1,  return an array output such that output[i] is equal to the product of all the elements of nums except nums[i].
+        /// Input:  [1,2,3,4]
+        /// Output: [24,12,8,6]
+        /// </summary>
+        public void ProductExceptSelfQuestion()
+        {
+            var arr = new int[] {1, 2, 3, 4};
+
+            var result = ProductExceptSelf(arr);
+
+            foreach (var r in result)
+            {
+                Console.Write(r + " ");
+            }
+        }
+
+        public int[] ProductExceptSelf(int[] nums)
+        {
+            int[] result = new int[nums.Length];
+
+            int left = 1;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                result[i] = left;
+                left = left * nums[i];
+            }
+
+            int right = 1;
+            for (int i = nums.Length - 1; i >= 0; i--)
+            {
+                result[i] = right * result[i];
+                right = right * nums[i];
+            }
+
+            return result;
+        }
+
+        public void LevelOrderTraversalOfBinaryTreeQuestion()
+        {
+            BinaryTreeNode root = new BinaryTreeNode(1);
+            var bt = new BinaryTree(root);
+            bt.AddChild(2);
+            bt.AddChild(3);
+            bt.AddChild(4);
+            bt.AddChild(5);
+            bt.AddChild(6);
+            bt.AddChild(7);
+            bt.AddChild(8);
+            bt.AddChild(9);
+            bt.AddChild(10);
+            bt.AddChild(11);
+
+            //Level order traversal can be considered a BFS search as you're printing one level at a time.
+
+            BreadthFirstSearch(bt.root);
+
+        }
+
+        public void BreadthFirstSearch(BinaryTreeNode root)
+        {
+            var queue = new Queue<BinaryTreeNode>();
+            queue.Enqueue(root);
+
+            while (queue.Count > 0)
+            {
+                var e = queue.Dequeue();
+                Console.Write(e.data + " ");
+
+
+                //add all child nodes
+                if (e.leftChild != null)
+                {
+                    queue.Enqueue(e.leftChild);
+                }
+
+                if (e.rightChild != null)
+                {
+                    queue.Enqueue(e.rightChild);
+                }
+            }
+        }
+
     }
 }

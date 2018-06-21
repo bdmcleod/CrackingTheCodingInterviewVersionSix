@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CrackingTheCodingInterviewVersionSix.ChapterTwo
 {
-    class Node
+    public class Node
     {
         public int data;
         public Node next;
