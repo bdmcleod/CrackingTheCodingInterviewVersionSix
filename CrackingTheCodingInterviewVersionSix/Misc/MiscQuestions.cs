@@ -25,7 +25,7 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
         /// <summary>
         /// Given a pointer to the head of a singly linked list, iterate it backwards printing the values in reverse. Give 2 implementations - a recursive one, and an iterative one.  
         /// </summary>
-        public void IterateThroughASinglyLinkedList()
+        public void IterateThroughASinglyLinkedListQuestion()
         {
             Node head = new Node(1);
             head.AppendToTail(2);
@@ -37,6 +37,10 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
             RecursivelyWalkThroughLinkedListFromHead(head);
         }
 
+        /// <summary>
+        /// Prints a linked list in reverse, recursive
+        /// </summary>
+        /// <param name="head"></param>
         private void RecursivelyWalkThroughLinkedListFromHead(Node head)
         {
             if (head == null)
@@ -51,6 +55,10 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
         }
 
+        /// <summary>
+        /// Prints a linked list in reverse, iterative
+        /// </summary>
+        /// <param name="head"></param>
         private void IterativelyWalkThroughLinkedListFromHead(Node head)
         {
             var nodeStack = new Stack<Node>();
@@ -1172,7 +1180,12 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
             //Level order traversal can be considered a BFS search as you're printing one level at a time.
 
+            Console.Write("BFS: ");
             BreadthFirstSearch(bt.root);
+
+            Console.WriteLine();
+            Console.Write("DFS: ");
+            DepthFirstSearch(bt.root);
 
         }
 
@@ -1196,6 +1209,318 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
                 if (e.rightChild != null)
                 {
                     queue.Enqueue(e.rightChild);
+                }
+            }
+        }
+
+        void DepthFirstSearch(BinaryTreeNode root)
+        {
+            if (root == null)
+            {
+                return;
+            }
+            var stack = new Stack<BinaryTreeNode>();
+            var visited = new HashSet<BinaryTreeNode>();
+
+            stack.Push(root);
+
+            while (stack.Count > 0)
+            {
+                var temp = stack.Pop();
+                Console.Write(temp.data + " ");
+
+                visited.Add(temp);
+
+                //walks down the right side first, then the left side
+                if (temp.leftChild != null && !visited.Contains(temp.leftChild))
+                {
+                    stack.Push(temp.leftChild);
+                }
+
+                if (temp.rightChild != null && !visited.Contains(temp.rightChild))
+                {
+                    stack.Push(temp.rightChild);
+       
+                }       
+            }
+        }
+
+        /// <summary>
+        /// The count-and-say sequence is the sequence of integers with the first five terms as following:
+        /// 
+        //1.     1
+        //2.     11
+        //3.     21
+        //4.     1211
+        //5.     111221
+        // 1 is read off as "one 1" or 11.
+        //11 is read off as "two 1s" or 21.
+        //21 is read off as "one 2, then one 1" or 1211.
+        //Given an integer n, generate the nth term of the count-and-say sequence.
+
+        //Note: Each term of the sequence of integers will be represented as a string.
+        /// </summary>
+        public void CountAndSayQuestion()
+        {
+
+        }
+
+        public string CountAndSay(int n)
+        {
+            int i = 2; int j = 0; string prev = ""; string curr = ""; int count = 0;
+
+            if (n == 1) return "1";
+            if (n == 2) return "11";
+            prev = "11";
+
+            while (i < n)
+            {
+                curr = ""; j = 1; count = 1;
+                while (j < prev.Length)
+                {
+                    if (prev[j] != prev[j - 1]) // Count not the same as previous element, so append to current string.
+                    {
+                        curr = curr + count + prev[j - 1];
+                        count = 1; // reset count for next.
+                    }
+                    else
+                    {
+                        count++; // count same as previous, so increment.
+                    }
+
+                    j++;
+                }
+
+                curr = curr + count + prev[j - 1];
+                prev = curr; // Assign current to previous for next iteration.
+                i++;
+            }
+            return curr;
+        }
+
+        /// <summary>
+        /// 
+        /// You are given two non-empty linked lists representing two non-negative integers. 
+        /// The digits are stored in reverse order and each of their nodes contain a single digit. 
+        /// Add the two numbers and return it as a linked list.
+        /// Input: (2 -> 4 -> 3) + (5 -> 6 -> 4)
+        /// Output: 7 -> 0 -> 8
+        /// Explanation: 342 + 465 = 807.
+        /// </summary>
+        public void AddTwoNumbersQuestion()
+        {
+            Node n = new Node(9);
+            //n.AppendToTail(4);
+            //n.AppendToTail(3);
+
+            Node m = new Node(1);
+            m.AppendToTail(9);
+            m.AppendToTail(9);
+            m.AppendToTail(9);
+            m.AppendToTail(9);
+            m.AppendToTail(9);
+            m.AppendToTail(9);
+            m.AppendToTail(9);
+            m.AppendToTail(9);
+            m.AppendToTail(9);
+            
+
+            var r = AddTwoNumbers(n, m);
+
+            while (r != null)
+            {
+                Console.Write(r.data + " ");
+                r = r.next;
+            }
+        }
+
+        public Node AddTwoNumbers(Node l1, Node l2)
+        {
+            var stackOne = new Stack<Node>();
+            var stackTwo = new Stack<Node>();
+
+
+            while (l1 != null)
+            {
+                stackOne.Push(l1);
+                l1 = l1.next;
+            }
+
+            while (l2 != null)
+            {
+                stackTwo.Push(l2);
+                l2 = l2.next;
+            }
+
+            double multiplier = Math.Pow(10, stackOne.Count-1);
+            double totalOne = 0;
+            while (stackOne.Count > 0)
+            {
+                totalOne += (stackOne.Pop().data * multiplier);
+                multiplier /= 10;
+            }
+
+            multiplier = Math.Pow(10, stackTwo.Count - 1);
+            double totalTwo = 0;
+            while (stackTwo.Count > 0)
+            {
+                totalTwo += (stackTwo.Pop().data * multiplier);
+                multiplier /= 10;
+            }
+
+            double actualTotal = totalTwo + totalOne;
+            var arr = actualTotal.ToString().ToCharArray();
+            Node curr = null;
+            Node newHead = null;
+
+            for (int i = arr.Length-1; i >= 0; i--)
+            {
+                if (curr == null)
+                {
+                    curr = new Node(arr[i] - '0');
+                    newHead = curr;
+                }
+                else
+                {
+                    curr.next = new Node(arr[i] - '0');
+                    curr = curr.next;
+                }
+            }
+
+            return newHead;
+        }
+
+        public Node AddTwoNumbersNonMath(Node l1, Node l2)
+        {
+            Node dummyHead = new Node(0);
+            Node p = l1, q = l2, curr = dummyHead;
+            int carry = 0;
+            while (p != null || q != null)
+            {
+                int x = (p != null) ? p.data : 0;
+                int y = (q != null) ? q.data : 0;
+                int sum = carry + x + y;
+                carry = sum / 10;
+                curr.next = new Node(sum % 10);
+                curr = curr.next;
+                if (p != null) p = p.next;
+                if (q != null) q = q.next;
+            }
+            if (carry > 0)
+            {
+                curr.next = new Node(carry);
+            }
+            return dummyHead.next;
+        }
+
+        public int GetSum(int a, int b)
+        {
+            if (b == 0)
+            {
+                return a;
+            }
+
+            return (GetSum(a ^ b, (a & b) << 1));
+        }
+
+        public void NeedleHaystackQuestion()
+        {
+            string input = String.Empty;
+            while (input != "-1")
+            {
+                Console.Write("Please enter a haystack: ");
+                input = Console.ReadLine();
+
+                Console.WriteLine();
+                Console.Write("Please enter a needle: ");
+                var needle = Console.ReadLine();
+                
+                if (input != "-1")
+                {
+                    var result = StrStr(input, needle);
+
+                    Console.WriteLine(result);
+                }
+            }
+        }
+
+        public int StrStr(string haystack, string needle)
+        {
+            int startingIndex = -1;
+            if (needle.Length == 0)
+            {
+                return 0;
+            }
+
+            if (needle.Length > haystack.Length)
+            {
+                return -1;
+            }
+
+            for (int i = 0; i < haystack.Length; i++)
+            {
+                if (haystack.Length < i + needle.Length)
+                {
+                    return -1;
+                }
+
+                if (haystack[i] == needle[0])
+                {
+
+                    startingIndex = i;
+                    for (int j = 0; j < needle.Length; j++)
+                    {
+                        if (haystack[i + j] == needle[j])
+                        {
+                            if (j + 1 == needle.Length)
+                            {
+                                return startingIndex;
+                            }
+                        }
+                        else
+                        {
+                            startingIndex = 0;
+                            //break the inner loop
+                            j = needle.Length;
+                        }
+                    }
+                }
+            }
+
+
+            return startingIndex;
+        }
+
+        public int FindMissingContinguousTriplet(string source)
+        {
+            if (source.Length < 2)
+            {
+                throw new Exception();
+            }
+            for (int number = 1, i =2; i < source.Length; number++, i+=3)
+            {
+                if ((source[i] - '0') != number)
+                {
+                    return number;
+                }
+            }
+
+            return -1;
+        }
+
+        public void MissingContiguousTripletQuestion()
+        {
+            string input = String.Empty;
+
+            while (input != "-1")
+            {
+                Console.Write("Please enter a series of contiguous numbers, starting with 1, and doing triplets. I'll tell you the missing triplet: ");
+                input = Console.ReadLine();
+
+                if (input != "-1")
+                {
+                    var ans = FindMissingContinguousTriplet(input);
+                    Console.WriteLine(ans);
                 }
             }
         }

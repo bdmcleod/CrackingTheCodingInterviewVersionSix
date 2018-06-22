@@ -17,7 +17,7 @@ namespace CrackingTheCodingInterviewVersionSix
         static void Main(string[] args)
         {
             var questions = new MiscQuestions();
-            questions.LevelOrderTraversalOfBinaryTreeQuestion();
+            questions.MissingContiguousTripletQuestion();
 
             Console.ReadLine();
         }
