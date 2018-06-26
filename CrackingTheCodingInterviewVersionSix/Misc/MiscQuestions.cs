@@ -139,6 +139,74 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
         }
 
+        public void AddBinaryQuestion()
+        {
+            string input = "";
+            string input2 = "";
+
+            while (input != "-1")
+            {
+                Console.Write("Please enter the first binary number: ");
+                input = Console.ReadLine();
+
+                Console.Write("Please enter the 2nd binary number: ");
+                input2 = Console.ReadLine();
+
+                var a = AddBinary(input, input2);
+                Console.WriteLine(a);
+            }
+        }
+
+        public string AddBinary(string a, string b)
+        {
+
+            bool carry = false;
+            char[] arr = new char[Math.Max(a.Length, b.Length) + 1];
+
+            string longer = String.Empty;
+            string shorter = String.Empty;
+            if (a.Length < b.Length)
+            {
+                a = a.PadLeft(b.Length, '0');
+            }
+            else
+            {
+                b = b.PadLeft(a.Length, '0');
+            }
+
+            for (int i = a.Length - 1; i >= 0; i--)
+            {
+                char l = (a[i] == b[i] ? '0' : '1');
+
+                if (l == '1' && carry == true)
+                {
+                    l = '0';
+                }
+                else if (l == '0' && carry == true)
+                {
+                    l = '1';
+                    carry = false;
+                }
+                else if (a[i] == '1' && b[i] == '1')
+                {
+                    carry = true;
+                }
+                else
+                {
+                    carry = false;
+                }
+
+                arr[i+1] = l;
+            }
+
+            if (carry)
+            {
+                arr[0] = '1';
+            }
+
+            return new string(arr);
+        }
+
         private int CountTriplesLessThanSumInArray(int[] array, int sum)
         {
             int total = 0;
@@ -574,19 +642,18 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
         public int[] TwoSum(int[] nums, int target)
         {
+            //key is the target value, value is the index where we found it
             var dict = new Dictionary<int, int>();
+
             for (int i = 0; i < nums.Length; i++)
             {
                 if (dict.ContainsKey(nums[i]))
                 {
                     return new int[] { dict[nums[i]], i };
                 }
-                else
+                else if (!dict.ContainsKey(target - nums[i]))
                 {
-                    if (!dict.ContainsKey(target - nums[i]))
-                    {
-                        dict.Add((target - nums[i]), i);
-                    }
+                    dict.Add(target - nums[i], i);
                 }
             }
 
@@ -724,36 +791,36 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
             }
         }
 
-        private Node ReverseList(Node head)
+        public Node ReverseList(Node head)
         {
-            var stack = new Stack<int>();
+            var stack = new Stack<Node>();
+
             var curr = head;
 
             while (curr != null)
             {
-                stack.Push(curr.data);
+                stack.Push(curr);
                 curr = curr.next;
             }
 
-            Node newNode;
+            Node newHead = null;
+            curr = null;
+
             if (stack.Count > 0)
             {
-                newNode = new Node(stack.Pop());
-            }
-            else
-            {
-                return null;
+                curr = stack.Pop();
+                newHead = curr;
             }
 
-            Node newHead = newNode;
             while (stack.Count > 0)
             {
-                newNode.next = new Node(stack.Pop());
-                newNode = newNode.next;
+
+                curr.next = stack.Pop();
+                curr = curr.next;
+
             }
 
             return newHead;
-
         }
 
         /// <summary>
@@ -776,6 +843,7 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
         {
             var lower = s.ToLower();
             var sb = new StringBuilder();
+            
 
             foreach (var letter in lower)
             {
@@ -921,11 +989,11 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
             n.AppendToTail(5);
 
 
-            var r = ReverseListRecursive(n);
+            var r = ReverseList(n);
 
             while (r!= null)
             {
-                Console.Write(r + " ");
+                Console.Write(r.data + " ");
                 r = r.next;
             }
         }
@@ -1262,40 +1330,39 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
         /// </summary>
         public void CountAndSayQuestion()
         {
-
+            Console.WriteLine(CountAndSay(5));
         }
 
         public string CountAndSay(int n)
         {
-            int i = 2; int j = 0; string prev = ""; string curr = ""; int count = 0;
+            return Count(n - 1, "1");
+        }
 
-            if (n == 1) return "1";
-            if (n == 2) return "11";
-            prev = "11";
+        public string Count(int n, string prev)
+        {
 
-            while (i < n)
+            if (n == 0) return prev;
+
+            int count = 0;
+            char compare = prev[0];
+            string result = "";
+
+            foreach (char a in prev)
             {
-                curr = ""; j = 1; count = 1;
-                while (j < prev.Length)
+                if (compare == a)
                 {
-                    if (prev[j] != prev[j - 1]) // Count not the same as previous element, so append to current string.
-                    {
-                        curr = curr + count + prev[j - 1];
-                        count = 1; // reset count for next.
-                    }
-                    else
-                    {
-                        count++; // count same as previous, so increment.
-                    }
-
-                    j++;
+                    count++;
                 }
-
-                curr = curr + count + prev[j - 1];
-                prev = curr; // Assign current to previous for next iteration.
-                i++;
+                else
+                {
+                    result = result + count + compare;
+                    compare = a;
+                    count = 1;
+                }
             }
-            return curr;
+            result = result + count + compare;
+
+            return Count(n - 1, result);
         }
 
         /// <summary>
@@ -1444,52 +1511,58 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
             }
         }
 
+        public void StrStrQuestion()
+        {
+            string input = "";
+            string input2 = "";
+
+            while (input != "-1")
+            {
+                Console.Write("Please enter the needle: ");
+                input = Console.ReadLine();
+
+                Console.Write("Please enter the haystack: ");
+                input2 = Console.ReadLine();
+
+                var a = StrStr(input2, input);
+                Console.WriteLine(a);
+            }
+        }
+
         public int StrStr(string haystack, string needle)
         {
-            int startingIndex = -1;
+            if (haystack.Length < needle.Length)
+            {
+                return -1;
+            }
+
             if (needle.Length == 0)
             {
                 return 0;
             }
 
-            if (needle.Length > haystack.Length)
+            for (int i = 0; i <= haystack.Length - needle.Length; i++)
             {
-                return -1;
-            }
-
-            for (int i = 0; i < haystack.Length; i++)
-            {
-                if (haystack.Length < i + needle.Length)
-                {
-                    return -1;
-                }
-
                 if (haystack[i] == needle[0])
                 {
-
-                    startingIndex = i;
                     for (int j = 0; j < needle.Length; j++)
                     {
-                        if (haystack[i + j] == needle[j])
+                        if (haystack[i + j] != needle[j])
                         {
-                            if (j + 1 == needle.Length)
-                            {
-                                return startingIndex;
-                            }
-                        }
-                        else
-                        {
-                            startingIndex = 0;
-                            //break the inner loop
                             j = needle.Length;
                         }
+
+                        if (j == needle.Length - 1)
+                            return i;
+
+                        
                     }
                 }
             }
 
-
-            return startingIndex;
+            return -1;
         }
+
 
         public int FindMissingContinguousTriplet(string source)
         {
@@ -1525,5 +1598,198 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
             }
         }
 
+        public void IsValidOpenCloseBracketsQuestion()
+        {
+            string input = String.Empty;
+
+            while (input != "-1")
+            {
+                Console.Write("Please enter a series of brackets, paranthesis, and curly brackets and i'll tell you if it's valid: ");
+                input = Console.ReadLine();
+
+                if (input != "-1")
+                {
+                    var ans = IsValid(input);
+                    if (ans)
+                        Console.WriteLine("true");
+                    else
+                        Console.WriteLine("false");
+                }
+            }
+        }
+
+        public bool IsValid(string s)
+        {
+            if (s.Length == 0)
+                return true;
+
+            var stack = new Stack<char>();
+            var hash = new HashSet<char>() { '[', '{', '(' };
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                if (hash.Contains(s[i]))
+                {
+                    stack.Push(s[i]);
+                }
+                else
+                {
+                    if (stack.Count == 0)
+                        return false;
+
+                    var c = stack.Pop();
+                    if (c == '(' && s[i] != ')')
+                        return false;
+                    else if (c == '{' && s[i] != '}')
+                        return false;
+                    else if (c == '[' && s[i] != ']')
+                        return false;
+                }
+            }
+
+            return stack.Count == 0;
+        }
+
+        public Node MergeKLists(Node[] lists)
+        {
+            var listNodes = new List<Node>();
+
+            foreach (var n in lists)
+            {
+                Node curr = n;
+                while (curr != null)
+                {
+                    listNodes.Add(curr);
+                    curr = curr.next;
+                }
+            }
+
+            var newList = listNodes.OrderBy(o => o.data).ToArray();
+            Node head = new Node(newList[0].data);
+            Node currNew = head;
+
+            for (int i = 1; i < newList.Length; i++)
+            {
+                currNew.next = new Node(newList[i].data);
+                currNew = currNew.next;
+            }
+
+            return head;
+        }
+
+        public void MergeListQuestion()
+        {
+            Node n1 = new Node(1);
+            n1.AppendToTail(4);
+            n1.AppendToTail(5);
+
+            Node n2 = new Node(1);
+            n2.AppendToTail(3);
+            n2.AppendToTail(4);
+
+            Node n3 = new Node(2);
+            n3.AppendToTail(6);
+            var input = new Node[]
+            {
+                n1, n2, n3
+            };
+
+            var result = MergeKLists(input);
+
+            while (result != null)
+            {
+                Console.Write(result + " ");
+                result = result.next;
+            }
+        }
+
+        public IList<IList<int>> LevelOrder(TreeNode root)
+        {
+            var list = new List<IList<int>>();
+            LevelOrder(root, list, 0);
+            return list;
+        }
+
+        public void LevelOrder(TreeNode root, IList<IList<int>> list, int depth)
+        {
+            if (root == null)
+                return;
+            while (list.Count < depth + 1)
+                list.Add(new List<int>());
+
+            list[depth].Add(root.data);
+            LevelOrder(root.leftChild, list, depth + 1);
+            LevelOrder(root.rightChild, list, depth + 1);
+        }
+
+        /// <summary>
+        /// Given a binary tree, return the level order traversal of its nodes' values. (ie, from left to right, level by level).
+        //        For example:
+        //  Given binary tree[3, 9, 20, null, null, 15, 7],
+        //    3
+        //   / \
+        //  9  20
+        //    /  \
+        //   15   7
+        //  return its level order traversal as:
+        //  [
+        //    [3],
+        //    [9,20],
+        //    [15,7]
+        //  ]
+        /// </summary>
+        public void LevelOrderQuestion()
+        {
+
+
+        }
+
+        public IList<string> LetterCombinations(string digits)
+        {
+            if (string.IsNullOrEmpty(digits))
+            {
+                return new List<string>(0);
+            }
+
+            string[] Mapping = new string[] { string.Empty, string.Empty, "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+            Queue<string> result = new Queue<string>(new string[] { "" });
+
+            for (int i = 0; i < digits.Length; i++)
+            {
+                string mappedValues = Mapping[digits[i] - '0'];
+                while (result.Count > 0 && result.Peek().Length == i)
+                {
+                    string curr = result.Dequeue();
+                    for (int j = 0; j < mappedValues.Length; j++)
+                    {
+                        result.Enqueue(curr + mappedValues[j]);
+                    }
+                }
+            }
+
+            return result.ToList();
+        }
+
+        public void LetterCombinationsQuestion()
+        {
+            var result = LetterCombinations("123");
+
+            foreach (var word in result)
+            {
+                Console.WriteLine(word);
+            }
+        }
+
+
+        public void LRUCacheQuestion()
+        {
+            var cache = new LRUCache(2);
+            cache.Put(2, 1);
+            cache.Put(1, 2);
+            cache.Put(2, 3);
+            cache.Put(4, 1);
+            cache.Get(1);
+            cache.Get(2);
+        }
     }
 }

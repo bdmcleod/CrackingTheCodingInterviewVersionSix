@@ -8,56 +8,54 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 {
     public class LRUCache
     {
-        private int count;
+        private List<KeyValuePair<int, int>> orderedList;
         private Dictionary<int, int> dict;
-        private List<Item> list;
+        int count;
 
 
         public LRUCache(int capacity)
         {
-            dict = new Dictionary<int, int>(count);
-            list = new List<Item>(count);
+            orderedList = new List<KeyValuePair<int, int>>(capacity);
+            dict = new Dictionary<int, int>();
+            count = capacity;
         }
 
         public int Get(int key)
         {
             if (dict.ContainsKey(key))
             {
-                var temp = list.Where(o => o.key == key).First();
-                list.Remove(temp);
-                list.Add(temp);
-
+                var temp = orderedList.First(o => o.Key == key);
+                orderedList.Remove(temp);
+                orderedList.Insert(0, temp);
                 return dict[key];
             }
-            else
-            {
-                return -1;
-            }            
+
+            return -1;
         }
 
         public void Put(int key, int value)
         {
-            if (dict.Count == count)
+            if (dict.ContainsKey(key))
             {
-                var temp = list[0];
-                dict.Remove(temp.key);
-                list.Remove(temp);
+                dict[key] = value;
+                var temp = orderedList.First(o => o.Key == key);
+                orderedList.Remove(temp);
+                orderedList.Insert(0, new KeyValuePair<int, int>(key, value));
+            }
+            else
+            {
+                dict.Add(key, value);
+                if (orderedList.Count == count)
+                {
+                    var element = orderedList.ElementAt(orderedList.Count - 1);
+                    orderedList.RemoveAt(orderedList.Count - 1);
+                    dict.Remove(element.Key);
+                }
+
+                orderedList.Insert(0, new KeyValuePair<int, int>(key, value));
             }
 
-            dict.Add(key, value);
-            list.Add(new Item(key, value));
-        }
-    }
-
-    internal class Item
-    {
-        public int key { get; set; }
-        public int value { get; set; }
-
-        public Item(int k, int v)
-        {
-            this.key = k;
-            this.value = v;
+            return;
         }
     }
 }
