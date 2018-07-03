@@ -2215,5 +2215,45 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
         {
             Console.WriteLine(PlusOne(new int[] { 9 }));
         }
+
+        public int LeastInterval(char[] tasks, int n)
+        {
+            var dict = new Dictionary<char, int>();
+
+            foreach (var rec in tasks)
+            {
+                if (dict.ContainsKey(rec))
+                    dict[rec]++;
+                else
+                    dict.Add(rec, 1);
+            }
+
+            var list = dict.OrderBy(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
+            int max = dict.First().Value;
+            int count = dict.Count(o => o.Value == max);
+
+            int iteration = (n + 1) * (max - 1) + count;
+
+            return (iteration >= tasks.Length ? iteration : tasks.Length);
+
+        }
+
+        public double Pow(double x, int n)
+        {
+            long N = n;
+            if (N < 0)
+            {
+                x = 1 / x;
+                N = -N; //make it positive
+            }
+            double ans = 1;
+            for (long i = 0; i < N; i++)
+            {
+                ans = ans * x;
+            }
+
+            return ans;
+        }
     }
 }
