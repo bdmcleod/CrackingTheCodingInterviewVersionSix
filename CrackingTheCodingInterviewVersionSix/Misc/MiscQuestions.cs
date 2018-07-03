@@ -461,6 +461,8 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
                 Console.Write("Please enter a string to get the longest substring: ");
                 input = Console.ReadLine();
 
+                
+
                 if (input != "-1")
                 {
                     int count = LengthOfLongestSubstring(input);
@@ -470,7 +472,7 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
         }
 
-        public int LengthOfLongestSubstring(string s)
+        public int LengthOfLongestSubstringOld(string s)
         {
             int runningTotal = 0;
             int index = 0;
@@ -515,7 +517,7 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
                 if (input != "-1")
                 {
-                    int count = ReverseInteger(int.Parse(input));
+                    int count = Reverse(int.Parse(input));
                     Console.WriteLine(count);
                 }
             }
@@ -538,43 +540,38 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
             }
         }
 
-        public int ReverseInteger(int x)
+        public int Reverse(int x)
         {
+            bool isNeg = (x < 0);
+            char[] arr;
 
-            var num = x.ToString().ToCharArray();
-            bool isNeg = false;
-            //first index is a -1
-            if (x < 0)
+            if (isNeg)
             {
-                isNeg = true;
+                arr = x.ToString().Substring(1).ToCharArray();
+            }
+            else
+            {
+                arr = x.ToString().ToCharArray();
             }
 
-            var sb = new StringBuilder();
+            Array.Reverse(arr);
 
-            for (int i= num.Length-1; i >= 0; i--)
-            {
-                if (char.IsNumber(num[i]))
-                sb.Append(num[i]);
-            }
-
-            int total = 0;
+            int result = 0;
             try
             {
-                total = int.Parse(sb.ToString());
+                checked
+                {
+                    result = int.Parse(new string(arr));
+                    if (isNeg)
+                        result *= -1;
+                }
             }
-            catch (OverflowException)
+            catch (OverflowException ex)
             {
                 return 0;
             }
 
-            if (isNeg)
-            {
-                return total * -1;
-            }
-            else
-            {
-                return total;
-            }
+            return result;
         }
 
         public int MyAtoi(string str)
@@ -1746,29 +1743,49 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
         public IList<string> LetterCombinations(string digits)
         {
-            if (string.IsNullOrEmpty(digits))
-            {
-                return new List<string>(0);
-            }
 
-            string[] Mapping = new string[] { string.Empty, string.Empty, "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
-            Queue<string> result = new Queue<string>(new string[] { "" });
+            if (digits.Length == 0)
+            {
+                return new List<string>();
+            }
+            var dict = new Dictionary<int, string>();
+            dict.Add(2, "abc");
+            dict.Add(3, "def");
+            dict.Add(4, "ghi");
+            dict.Add(5, "jkl");
+            dict.Add(6, "mno");
+            dict.Add(7, "pqrs");
+            dict.Add(8, "tuv");
+            dict.Add(9, "wxyz");
+            dict.Add(0, "");
+            dict.Add(1, "");
+
+            var list = new List<string>();
+            list.Add(String.Empty);
 
             for (int i = 0; i < digits.Length; i++)
             {
-                string mappedValues = Mapping[digits[i] - '0'];
-                while (result.Count > 0 && result.Peek().Length == i)
+                var letters = dict[digits[i] - '0'];
+                if (letters.Length == 0)
+                    continue;
+
+                var tempResult = new List<string>();
+
+                for (int j = 0; j < list.Count(); j++)
                 {
-                    string curr = result.Dequeue();
-                    for (int j = 0; j < mappedValues.Length; j++)
+                    for (int k = 0; k < letters.Length; k++)
                     {
-                        result.Enqueue(curr + mappedValues[j]);
+                        string n = list[j] + letters[k];
+                        tempResult.Add(n);
                     }
                 }
+
+                list = tempResult;
             }
 
-            return result.ToList();
+            return list;
         }
+    
 
         public void LetterCombinationsQuestion()
         {
@@ -1790,6 +1807,413 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
             cache.Put(4, 1);
             cache.Get(1);
             cache.Get(2);
+        }
+
+        public String LongestPalindrome(string source)
+        {
+            int start = 0, end = 0;
+            for (int i = 0; i < source.Length; i++)
+            {
+                //check for an odd number length solution
+                int len1 = ExpandAroundCenter(source, i, i);
+
+                //check for an even number length solution
+                int len2 = ExpandAroundCenter(source, i, i + 1);
+                
+                //find the longest solution of these 2
+                int len = Math.Max(len1, len2);
+
+                //see if it's the new longest
+                if (len > end-start)
+                {
+                    //if so, set starting and ending position, from the known middle index.
+                    start = i -(len - 1) / 2;
+                    end = i + len / 2;
+                }
+            }
+
+            return source.Substring(start, end - start + 1);
+        }
+
+        public int ExpandAroundCenter(string source, int left, int right)
+        {
+            int L = left;
+            int R = right;
+            while (L >= 0 && R < source.Length && source[L] == source[R])
+            {
+                L--;
+                R++;
+            }
+
+            return R - L - 1;
+        }
+
+        /// <summary>
+        /// Given a string s, find the longest palindromic substring in s. You may assume that the maximum length of s is 1000.
+        /// Example 1:
+
+        //Input: "babad"
+        //Output: "bab"
+        //Note: "aba" is also a valid answer.
+        //Example 2:
+        //Input: "cbbd"
+        //Output: "bb"
+        /// 
+        /// </summary>
+        public void LongestPalindromeQuestion()
+        {
+            string startingString = "bb";
+            Console.WriteLine(startingString);
+            Console.WriteLine(LongestPalindrome(startingString));
+        }
+
+        public void FindLengthOfLCISQuestion()
+        {
+            var arr = new int[] {1,3,5,4,2,3,4,5};
+            foreach (var element in arr)
+            {
+                Console.Write(element + " ");
+            }
+            Console.WriteLine();
+            var x = FindLengthOfLCIS(arr);
+            Console.WriteLine(x);
+        }
+
+        public int FindLengthOfLCIS(int[] nums)
+        {
+            int start = 0, end = 0;
+            for (int i = 0; i < nums.Length; i++)
+            {
+                int len1 = CheckMiddle(nums, i, i);
+                int len2 = CheckMiddle(nums, i, i + 1);
+                int len = Math.Max(len1, len2);
+                if (len > end - start)
+                {
+                    start = i - (len - 1) / 2;
+                    end = 1 + (len / 2);
+                }
+            }
+
+            return end - start + 1;
+        }
+
+        public int CheckMiddle(int[] arr, int start, int end)
+        {
+            int prev = start - 1;
+            int next = end + 1;
+
+            if (start < 0 || end >= arr.Length || arr[start] == arr[end] || arr[start] > arr[end])
+            {
+                return 0;
+            }
+
+            while (prev >= 0 && next < arr.Length && arr[prev] < arr[start] && arr[next] > arr[end])
+            {
+                start--;
+                prev--;
+                end++;
+                next++;
+            }
+
+            return end - start + 1;
+        }
+
+        public string ReverseStringInPlace(StringBuilder source)
+        {
+
+            for (int i =0, j = source.Length-1; i < j; i++, j--)
+            {
+                var temp = source[j];
+                source[j] = source[i];
+                source[i] = temp;
+            }
+
+            return source.ToString();
+        }
+
+        //public void ReverseStringInPlaceQuestion()
+        //{
+        //    string input = "";
+        //    while (input != "-1")
+        //    {
+        //        Console.Write("Please enter a string to reverse: ");
+        //        input = Console.ReadLine();
+
+        //        Console.WriteLine(ReverseStringInPlace(input));
+        //    }
+        //}
+
+        public int CountPalindromicSubstrings(string s)
+        {
+            var allSubsets = new List<IList<char>>();
+            int count = 0;
+            allSubsets.Add(new List<char>() { });
+
+            for (int i = 0; i < s.Length; i++)
+            {
+                var newSubsets = new List<IList<char>>();
+                char curr = s[i];
+                for (int j = 0; j < allSubsets.Count; j++)
+                {
+                    var temp = new List<char>(allSubsets[j]); ;
+                    temp.Add(curr);
+                    newSubsets.Add(new List<char>(temp));
+                }
+
+                foreach (var newList in newSubsets)
+                {
+                    allSubsets.Add(newList);
+                }
+            }
+
+
+            foreach (List<char> subset in allSubsets)
+            {
+                if (IsPalindrome(subset))
+                {
+                    count++;
+                }
+            }
+
+            return count;
+        }
+
+        public bool IsPalindrome(List<char> list)
+        {
+            if (list.Count == 1)
+                return true;
+
+            if (list.Count == 0)
+                return false;
+
+            for (int i = 0, j = list.Count - 1; i < j; i++, j--)
+            {
+                if (list[i] != list[j])
+                    return false;
+            }
+
+            return true;
+        }
+
+        public void CountPalidromicSubstringsQuestion()
+        {
+            var input = "aaa";
+
+            Console.WriteLine(CountPalindromicSubstrings(input));
+        }
+
+        public int MaxSubArray(int[] nums)
+        {
+            var len = nums.Length;
+            int[] maxArray = new int[len];
+            int max = int.MinValue;
+
+            for (int i = len-1; i >=0; i--)
+            {
+                maxArray[i] = Math.Max(nums[i], i + 1 < len ? maxArray[i + 1] + nums[i] : int.MinValue);
+                if (maxArray[i] > max)
+                    max = maxArray[i];
+            }
+
+            return max;
+        }
+
+        public bool WordBreak(String s, List<String> wordDict)
+        {
+            bool[] boolArr = new bool[s.Length + 1];
+            boolArr[0] = true;
+
+            for (int i = 0; i < boolArr.Length; i++)
+            {
+                for (int j = 0; j < i; j++)
+                {
+                    if (boolArr[j] && wordDict.Contains(s.Substring(j, i-j)))
+                    {
+                        boolArr[i] = true;
+                        break;
+                    }
+                }
+            }
+
+            return boolArr[s.Length];
+        }
+
+        public void WordBreakQuestion()
+        {
+            WordBreak("catsandog", new List<string>(){ "cats", "dog", "sand", "and", "cat"});
+        }
+
+        public void LeastIntervalQuestion()
+        {
+            var tasks = new char[]{ 'A', 'A', 'A', 'B', 'B', 'B'};
+            int n = 2;
+
+            Console.WriteLine(LeastInterval(tasks, n));
+        }
+
+
+
+        public int LeastInterval(char[] tasks, int n)
+        {
+            var dict = new Dictionary<char, int>();
+
+            foreach (var letter in tasks)
+            {
+                if (dict.ContainsKey(letter))
+                    dict[letter]++;
+                else
+                    dict.Add(letter, 1);
+            }
+
+            // Sort them
+            dict = dict.OrderByDescending(c => c.Value).ToDictionary(c => c.Key, c => c.Value);
+
+            // Get the max count 
+            int max = dict.First().Value;
+
+            // Total all the records that equal the max amount
+            int count = dict.Count(c => c.Value == max);
+            int iteration = (n + 1) * (max - 1) + count;
+
+            // iteration should be greater than task length
+            return (iteration >= tasks.Length) ? iteration : tasks.Length;
+        }
+
+        public List<string> RemoveInvalidParentheses(String s)
+        {
+            List<string> ans = new List<string>();
+            Remove(s, ans, 0, 0, new char[] { '(', ')' });
+
+            return ans;
+        }
+
+        private void Remove(string s, List<string> ans, int lastI, int lastJ, char[] parantheses)
+        {
+            for (int stack = 0, i = lastI; i < s.Length; i++)
+            {
+                if (s[i] == parantheses[0])
+                    stack++;
+                else if (s[i] == parantheses[1])
+                    stack--;
+
+                if (stack >= 0)
+                    continue;
+
+                for (int j = lastJ; j <= i; j++)
+                {
+                    if (s[j] == parantheses[1] && (j == lastJ || s[j-1] != parantheses[1]))
+                    {
+                        Remove(s.Substring(0, j) + s.Substring(j + 1, s.Length), ans, i, j, parantheses);
+                    }
+
+                    return;
+                }
+
+                var reversed = s.ToArray().Reverse().ToString();
+                if (parantheses[0] == '(')
+                    Remove(reversed, ans, 0, 0, new char[] { ')', '(' });
+
+                else
+                    ans.Add(reversed);
+            }
+        }
+
+        public int LengthOfLongestSubstring(string s)
+        {
+            if (s.Length == 0)
+                return 0;
+
+            if (s.Length == 1)
+                return 1;
+
+            int n = s.Length, answer = 0;
+            int[] arr = new int[256];
+
+            for (int j =0, i = 0; j < n; j++)
+            {
+                // if we've seen this number already, set i to the last index we saw it.
+                i = Math.Max(arr[s[j]], i);
+
+                //set answer to the max of the running answer and the current distance between j and i.
+                answer = Math.Max(answer, j - i + 1);
+
+                //update arr to reflect the current index
+                arr[s[j]] = j + 1;
+            }
+
+            return answer;
+
+        }
+
+        public void LengthOfLongestSubstringQuestion()
+        {
+            Console.WriteLine(LengthOfLongestSubstring("dvdf"));
+        }
+
+        public int RemoveDuplicates(int[] nums)
+        {
+            if (nums.Length == 0) return 0;
+            int i = 0;
+            for (int j = 1; j < nums.Length; j++)
+            {
+                if (nums[j] != nums[i])
+                {
+                    i++;
+                    nums[i] = nums[j];
+                }
+            }
+            return i + 1;
+        }
+
+        public void RemoveDuplicatesQuestion()
+        {
+            var arr = new int[] { 0, 0, 1, 1, 1, 2, 2, 3, 3, 4 };
+
+            RemoveDuplicates(arr);
+
+            foreach (var rec in arr)
+            {
+                Console.Write(rec + " ");
+            }
+        }
+
+        public int[] PlusOne(int[] digits)
+        {
+
+            bool carry = false;
+            for (int i = digits.Length - 1; i >= 0; i--)
+            {
+                digits[i] = digits[i] + 1;
+
+                if (digits[i]  == 10)
+                {
+                    carry = true;
+                    digits[i] = 0;
+                }
+                else
+                {
+                    carry = false;
+                    break;
+                }
+            }
+
+            if (carry)
+            {
+                var arr = new int[digits.Length + 1];
+                arr[0] = 1;
+                for (int i = 1; i < arr.Length; i++)
+                    arr[i] = digits[i - 1];
+
+                return arr;
+            }
+
+
+            return digits;
+        }
+
+        public void PlusOneQuestion()
+        {
+            Console.WriteLine(PlusOne(new int[] { 9 }));
         }
     }
 }

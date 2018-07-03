@@ -122,50 +122,51 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterOne
 
         public bool OneEditAway(string stringOne, string stringTwo)
         {
-            var lengthDiff = stringOne.Length - stringTwo.Length;
-            bool haveSeenEdit = false;
+            if (stringOne == null && stringTwo == null)
+                return false;
+            if (stringOne == null)
+                return (stringTwo.Length == 1);
+            if (stringTwo == null)
+                return (stringOne.Length == 1);
 
+            var lengthDiff = stringOne.Length - stringTwo.Length;
+            
             if (lengthDiff > 1 || lengthDiff < -1)
             {
                 return false;
             }
 
-            int i;
-            for (i=0; i < stringOne.Length; i++)
+            int i = 0;
+            int j = 0;
+            int editDistance = 0;
+
+            while ( i < stringOne.Length && j < stringTwo.Length)
             {
-                var checkHaveSeenEdit = false;
-                if (i >= stringTwo.Length)
+                if (stringOne[i] != stringTwo[j])
                 {
-                    checkHaveSeenEdit = true;
-                }
-                else if (stringTwo[i] != stringOne[i])
-                {
-                    checkHaveSeenEdit = true;
-                }
-
-
-                if (checkHaveSeenEdit)
-                {
-                    if (haveSeenEdit)
-                    {
+                    if (++editDistance > 1)
                         return false;
-                    }
-                    else
+
+                    if (stringOne. Length < stringTwo.Length)
                     {
-                        haveSeenEdit = true;
+                        j++;
+                        continue;
+                    }
+                    else if (stringTwo.Length < stringOne.Length)
+                    {
+                        i++;
+                        continue;
                     }
                 }
+                i++;
+                j++;
             }
 
-            if (i + 1 < stringTwo.Length)
-            {
-                if (haveSeenEdit)
-                {
-                    return false;
-                }
-            }
+            editDistance += stringOne.Length - i;
+            editDistance += stringTwo.Length - j;
 
-            return true;
+            return (editDistance == 1);
+
         }
 
         public string StringCompression(string source)
@@ -215,6 +216,47 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterOne
 
             }
 
+        }
+
+        public void DFS(char[,] grid, int row, int col)
+        {
+            int newRow = grid.GetLength(0);
+            int newCol = grid.GetLength(1);
+
+            //check to see if we're out of bounds or if the current record is 0
+            if (row < 0 || col < 0 || row >= newRow || col >= newCol || grid[row,col] == 0)
+                return;
+
+            grid[row,col] = '0';
+            DFS(grid, row - 1, col);
+            DFS(grid, row + 1, col);
+            DFS(grid, row, col - 1);
+            DFS(grid, row, col + 1);
+
+        }
+
+        public int NumIslands(char[,] grid)
+        {
+            if (grid.Length == 0)
+                return 0;
+
+            int total = 0;
+
+            int numRow = grid.GetLength(0);
+            int numCol = grid.GetLength(1);
+
+            for (int r = 0; r < numRow; r++)
+            {
+                for (int c = 0; c < numCol; c++)
+                {
+                    if (grid[r,c] == '1')
+                    {
+                        total++;
+                        DFS(grid, r, c);
+                    }
+                }
+            }
+            return total;
         }
 
     }

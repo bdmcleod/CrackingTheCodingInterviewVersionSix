@@ -94,6 +94,45 @@ namespace CrackingTheCodingInterviewVersionSix.ChapterFour
             var root = g.CreateMinimalTreeFromSortedArray(arr);
         }
 
+        public string Serialize(TreeNode root)
+        {
+            var sb = new StringBuilder();
+            BSTToString(root, sb);
+            string result = sb.ToString();
+
+            return result;
+        }
+
+        public void BSTToString(TreeNode root, StringBuilder sb)
+        {
+            if (root == null)
+            {
+                sb.Append("null, ");
+                return;
+            }
+            else
+            {
+                sb.Append(root.data);
+                sb.Append(", ");
+            }
+
+            
+
+            BSTToString(root.leftChild, sb);
+            BSTToString(root.rightChild, sb);
+        }
+
+        public void CheckBSTToStringSerializer()
+        {
+            int[] arr = new int[] { 10, 9, 8, 7, 6, 5, 4, 3, 2, 1 };
+            Array.Sort(arr);
+
+            var g = new Graph();
+            var root = g.CreateMinimalTreeFromSortedArray(arr);
+
+            Console.WriteLine(Serialize(root));
+        }
+
 
     }
 }
