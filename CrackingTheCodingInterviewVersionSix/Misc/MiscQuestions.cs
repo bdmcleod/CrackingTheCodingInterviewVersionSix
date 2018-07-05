@@ -820,6 +820,26 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
             return newHead;
         }
 
+        public Node ReverseLinkedListIterativeNoStack(Node head)
+        {
+            if (head == null)
+                return null;
+
+            Node newHead = null;
+            var curr = head;
+
+            while (curr != null)
+            {
+                var temp = curr.next;
+                curr.next = newHead;
+                newHead = curr;
+
+                curr = temp;
+            }
+
+            return newHead;
+        }
+
         /// <summary>
         /// Given a string, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.
         /// 
@@ -986,7 +1006,7 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
             n.AppendToTail(5);
 
 
-            var r = ReverseList(n);
+            var r = ReverseLinkedListIterativeNoStack(n);
 
             while (r!= null)
             {
@@ -2052,33 +2072,6 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
         }
 
 
-
-        public int LeastInterval(char[] tasks, int n)
-        {
-            var dict = new Dictionary<char, int>();
-
-            foreach (var letter in tasks)
-            {
-                if (dict.ContainsKey(letter))
-                    dict[letter]++;
-                else
-                    dict.Add(letter, 1);
-            }
-
-            // Sort them
-            dict = dict.OrderByDescending(c => c.Value).ToDictionary(c => c.Key, c => c.Value);
-
-            // Get the max count 
-            int max = dict.First().Value;
-
-            // Total all the records that equal the max amount
-            int count = dict.Count(c => c.Value == max);
-            int iteration = (n + 1) * (max - 1) + count;
-
-            // iteration should be greater than task length
-            return (iteration >= tasks.Length) ? iteration : tasks.Length;
-        }
-
         public List<string> RemoveInvalidParentheses(String s)
         {
             List<string> ans = new List<string>();
@@ -2120,29 +2113,20 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
         public int LengthOfLongestSubstring(string s)
         {
-            if (s.Length == 0)
-                return 0;
+            //our index to track the last element. Initialize it to a value it'll never be. 
+            int[] lastInd = Enumerable.Repeat(-1, 256).ToArray();
 
-            if (s.Length == 1)
-                return 1;
+            int start = -1;
+            int res = 0;
 
-            int n = s.Length, answer = 0;
-            int[] arr = new int[256];
-
-            for (int j =0, i = 0; j < n; j++)
+            for (int i = 0; i < s.Length; i++)
             {
-                // if we've seen this number already, set i to the last index we saw it.
-                i = Math.Max(arr[s[j]], i);
-
-                //set answer to the max of the running answer and the current distance between j and i.
-                answer = Math.Max(answer, j - i + 1);
-
-                //update arr to reflect the current index
-                arr[s[j]] = j + 1;
+                if (lastInd[s[i]] > start)
+                    start = lastInd[s[i]];
+                lastInd[s[i]] = i;
+                res = Math.Max(res, i - start);
             }
-
-            return answer;
-
+            return res;
         }
 
         public void LengthOfLongestSubstringQuestion()
@@ -2255,5 +2239,107 @@ namespace CrackingTheCodingInterviewVersionSix.Misc
 
             return ans;
         }
+
+        public void PrintLinkedListInReverse(Node head)
+        {
+            if (head.next == null)
+            {
+                Console.WriteLine(head.data + " ");
+                return;
+            }
+            else
+            {
+                PrintLinkedListInReverse(head.next);
+                Console.WriteLine(head.data + " ");
+            }
+                
+
+        }
+
+        public void PrintLinkedListInReverseIterative(Node head)
+        {
+
+        }
+
+        public void PrintLinkedListInReverseQuestion()
+        {
+            var node = new Node(1);
+            node.AppendToTail(2);
+            node.AppendToTail(3);
+            node.AppendToTail(4);
+            node.AppendToTail(5);
+
+            PrintLinkedListInReverse(node);
+        }
+
+        public bool IsValidBST(TreeNode root)
+        {
+            if (root == null)
+                return false;
+
+            long maxValue = long.MinValue;
+
+            return IsValidBST(root, ref maxValue);
+
+
+        }
+
+        public bool IsValidBST(TreeNode root, ref long maxValue)
+        {
+            if (root == null)
+                return true;
+
+            if (!IsValidBST(root.leftChild, ref maxValue))
+                return false;
+
+            if (root.data <= maxValue)
+                return false;
+            else
+                maxValue = root.data;
+
+            if (!IsValidBST(root.rightChild, ref maxValue))
+                return false;
+
+            return true;
+        }
+
+        public string ReverseStr(string s, int k)
+        {
+            if (string.IsNullOrEmpty(s) || k < 2) return s;
+
+            char[] arr = s.ToCharArray();
+
+            for (int i = 0; i < s.Length; i += 2 * k)
+            {
+                // Determine where the current reverse should end: either (a) after transversing k characters or (b) coming to the end of the string (whichever is smaller)
+                int end = Math.Min(i + k, s.Length);
+
+                // Inner-loop performs the actual reversing of the characters
+                for (int j = i; j < end; j++)
+                {
+                    // Calculate position of character within group e.g. first character is pos 0, second pos 1 ...
+                    int pos = j - i;
+
+                    // Calculate the position of the new character, which is simply at the end of the group - pos
+                    int newPos = end - pos - 1;
+
+                    // Place the character in the new position
+                    arr[newPos] = s[j];
+                }
+            }
+
+            return new string(arr);
+        }
+
+        public void ReverseStrQuestion()
+        {
+            string s = "abcdefghij";
+            int k = 4;
+                
+            Console.WriteLine(ReverseStr(s, k));
+        }
+
+
+
     }
 }
